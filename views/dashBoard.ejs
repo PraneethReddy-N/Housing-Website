@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="col-md-6 m-auto dropdown">
+        <h4><i class="fa-sharp fa-solid fa-circle-chevron-down fa-xl" style="color: #1f4fa3;"></i></h4>
+        <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
+            <li><a class="dropdown-item" href="/dashboard">Home</a></li>
+            <li><a class="dropdown-item" href="/amenities">Amenities</a></li>
+            <li><a class="dropdown-item" href="/bookTour">Book a Tour</a></li>
+            <li><a class="dropdown-item" href="/contactUs">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="">
+        <button id="logout" name="logout" type="button"><i class="fa-solid fa-right-from-bracket"></i>  Log Out</button>
+    </div>
+
+    <script>
+        document.getElementById('logout').addEventListener('click',function(){
+            window.location.href = '/'
+        })
+    </script>
+    
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+<div class="">
+    <button type="button" id="community"><i class="fa-solid fa-house"> Community amenities</i></button>
+    &nbsp;&nbsp;
+    <button type="button" id="housing" ><i class="fa-solid fa-house"> Housing amenities</i></button>
+   <div id="amenities-container">
+   </div>
+
+   <button type="button" id="back" name="back" href="/dashboard">Back</button>
+   
+</div>
+
+<script>
+    document.getElementById('community').addEventListener('click',function(){
+        fetchAmenities('/amenities/get-amenities')
+    });
+
+    document.getElementById('housing').addEventListener('click',function(){
+        fetchAmenities('/amenities/housing-amenities')
+    });
+
+    function fetchAmenities(url){
+        console.log(url)
+        fetch(url)
+        .then(response => response.json())
+        .then(data =>{
+            console.log(data)
+            var amenitiescontainer = document.getElementById('amenities-container');
+            amenitiescontainer.innerHTML = '';
+
+            data.forEach(element => {
+                console.log("in element")
+                var amenityDiv = document.createElement('div');
+                    amenityDiv.textContent = `${element.name} - ${element.description}`;
+                    amenitiescontainer.appendChild(amenityDiv);
+            });
+        })
+        .catch(error=>console.error('Error :', error));
+    }
+
+    document.getElementById('back').addEventListener('click',function(){
+        console.log("in here");
+         window.location.href = '/dashboard';
+    });
+
+</script>
+
