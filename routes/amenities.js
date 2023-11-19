@@ -14,7 +14,7 @@ let HousingAmenities = [
     {name : 'kitchen',description:'its a fucking kitchen'},
     {name : 'bathroom',description:'its a fucking bathroom'}
     
-    // ... other amenities
+    
 ];
 router.get('/',(req,res) =>{
     res.render('amenities');
