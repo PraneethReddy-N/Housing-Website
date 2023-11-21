@@ -1,8 +1,10 @@
 const express  = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const app = express();
-
+const crypto = require('crypto');
+const secretName = crypto.randomBytes(16).toString('hex');
 // const {communityAmenities} = require('./routes/amenities')
 //db config
 const db =require('./config/Keys').MongoURI;
@@ -17,6 +19,13 @@ mongoose.connect(db)
 app.set('view engine','ejs');
 app.use(expressLayouts);
 
+//session middleware
+app.use(session({
+   secret: secretName,
+   resave: false,
+   saveUninitialized: true,
+   cookie:{secure:'auto',maxAge: 3600000} 
+}));
 
 //BodyParserMiddleware
 app.use(express.urlencoded({ extended: false }));
@@ -29,6 +38,8 @@ app.use('/dashboard',require('./routes/dashboards'));
 app.use('/amenities',require('./routes/amenities'));
 app.use('/bookTour',require('./routes/bookTour'));
 app.use('/contactUs',require('./routes/contactUs'));
+app.use('/lease',require('./routes/lease'));
+app.use('/leaseRenewal',require('./routes/leaseRenewal'));
 
 
 // app.use('/amenities',(req,res)=>{
