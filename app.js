@@ -40,6 +40,7 @@ app.use('/bookTour',require('./routes/bookTour'));
 app.use('/contactUs',require('./routes/contactUs'));
 app.use('/lease',require('./routes/lease'));
 app.use('/leaseRenewal',require('./routes/leaseRenewal'));
+app.use('/leaseUpdate',require('./routes/leaseUpdate'));
 
 
 // app.use('/amenities',(req,res)=>{
