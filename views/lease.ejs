@@ -1,0 +1,56 @@
+<h1 class="text-center mb-3">
+    <i class="fa-solid fa-handshake"></i>Lease Details
+</h1>
+
+<% if (typeof message !== 'undefined' && message) { %>
+    <p><%= message %></p>
+<% } %>
+
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">Lease Start Date</span>
+    <input type="date" class="form-control" disabled name="leaseStartDate" value="<%= leaseStartDate %>" aria-label="Lease Start Date" aria-describedby="basic-addon1">
+</div>
+  
+<div class="input-group mb-3">
+    <input type="date" class="form-control" disabled name="leaseEndDate" value="<%= leaseEndDate %>" aria-label="Lease End Date" aria-describedby="basic-addon2">
+    <span class="input-group-text" id="basic-addon2">Lease End Date</span>
+</div>
+  
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon2">Current Lease Period</span>
+    <input type="text" disabled name="leasePeriod" class="form-control" value="<%= leasePeriod %>" aria-label="Current Lease Period">
+</div>
+
+  
+
+  
+
+
+  <button type="button" class="btn btn-primary btn-lg" id="renew">Renew Lease</button>
+<button type="button" class="btn btn-secondary btn-lg" id="back">Back</button>
+
+
+<table class="table">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">Documents Provided</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= AnyId %> </td>
+        <td><%= image %></td>
+      </tr>
+    </tbody>
+  </table>
+  
+
+<script>
+ document.getElementById('renew').addEventListener('click',function() {
+    window.location.href = '/leaseUpdate';
+ });
+
+ document.getElementById('back').addEventListener('click',function(){
+    window.location.href='/dashboard';
+ });
+</script>

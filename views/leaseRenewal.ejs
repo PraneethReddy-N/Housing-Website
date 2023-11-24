@@ -1,0 +1,68 @@
+
+<h1 class="text-center mb-3">
+    <i class="fa-solid fa-pen"></i>Lease Agreement
+</h1>
+
+
+<form action="/leaseRenewal" method="POST">
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">Lease Start Date</span>
+    <input type="date" class="form-control" name="leaseStartDate" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+  </div>
+  
+  <div class="input-group mb-3">
+    <input type="date" class="form-control" name="leaseEndDate" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <span class="input-group-text" id="basic-addon2">Lease End Date</span>
+  </div>
+
+
+<div class="input-group mb-3">
+    <label class="input-group-text" for="inputGroupSelect01">Options</label>
+    <select class="form-select" name="AnyId" id="inputGroupSelect01">
+      <option selected>Provide any one of the documents Provided below</option>
+      <option value="stateId">StateId</option>
+      <option value="Passport">PassPort</option>
+      <option value="DrivingLicense">Driving Licensne</option>
+    </select>
+  </div>
+  <div class="input-group mb-3">
+    <input type="file" name="image" class="form-control" id="inputGroupFile01">
+  </div>
+  <br />
+
+  <div class="form-check">
+    <input class="form-check-input" name="BedRoomType" type="checkbox" onchange="checkChecked()"  value="oneBedRoom" id="oneBedRoom">
+    <label class="form-check-label" for="flexCheckDefault">
+     one BedRoom
+    </label>
+    &nbsp;
+    &nbsp;&nbsp;&nbsp;
+    <input class="form-check-input" name="BedRoomType" onchange="checkChecked()" type="checkbox" value="TwoBedRoom" id="TwoBedRoom" >
+    <label class="form-check-label" for="flexCheckChecked">
+      Two BedRoom
+    </label>
+  </div>
+
+
+  <button type="submit" class="btn btn-primary btn-lg" id="RenewLease">Renew Lease</button>
+<button type="button" class="btn btn-secondary btn-lg" id="back">Back</button>
+  
+</form>
+
+
+<script>
+    function checkChecked(){
+  
+  if(document.getElementById('oneBedRoom').checked === true){
+  document.getElementById('TwoBedRoom').disabled = true;
+}else if(document.getElementById('TwoBedRoom').checked === true){
+ 
+  document.getElementById('oneBedRoom').disabled = true;
+}
+else{
+
+  document.getElementById('oneBedRoom').disabled = false;
+  document.getElementById('TwoBedRoom').disabled = false;
+}
+}
+</script>
