@@ -9,10 +9,18 @@
     </style>
 </head>
 <body>
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div>
+            <% if (message) { %>
+                <p><%= message %></p>
+            <% } %>
+        </div>
+      </div>
     <div class="row mt-5 mx-5 text-center">
-        <form action="/users/dashboard" method="post">
+        <form action="/users/login" method="POST">
             <i class="fa-solid fa-user fa-lg"></i> : &nbsp;
-            <input type="text" name="Username" id="user">
+            <input type="email" name="email" id="user">
             <br />
             <br />
             <i class="fa-solid fa-lock"></i>  :   &nbsp;
