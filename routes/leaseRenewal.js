@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const lease = require('../models/lease');
 const user  = require('../models/User')
-const payment = require("../models/payment")
+const payment = require("../models/payment");
+const Transactions = require('../models/leaseTransactions');
 const stripe = require('stripe')('sk_test_51OEiYvFzwNtHS26bLB4bu2CHlnxCTzxlubRYt4vCgfoodltggFXUyOSzSKilsh8qnyOUeSQv69hJmDCBkjRwKA7P00acuEuqDr');
  
 router.get('/',(req,res) =>{
@@ -21,10 +22,10 @@ router.post('/',(req,res) =>{
     let unitAmount;
                 switch(req.body.BedRoomType){
                     case 'oneBedRoom':
-                        unitAmount = 1279;
+                        unitAmount = 100;
                         break;
                     case 'TwoBedRoom' :
-                        unitAmount = 1679;
+                        unitAmount = 100;
                         break;
                     default:
                         unitAmount = 0;
@@ -68,7 +69,6 @@ router.post('/',(req,res) =>{
         .then(
             details =>{
                 console.log("Lease Details after save:", details);
-                req.session.message = `hello  , your lease has been confirmed  and a reciept of the lease agreement has been sent to your email `;
                 stripe.checkout.sessions.create({
                     payment_method_types:['card'],
                     line_items:[{
@@ -82,8 +82,9 @@ router.post('/',(req,res) =>{
                         quantity: 1,
                     }],
                     mode: 'payment',
-                    success_url: `${req.headers.origin}/dashboard`,
+                    success_url: `${req.headers.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
                     cancel_url: `${req.headers.origin}/leaseRenewal`, 
+                    customer_email: req.session.email,
                 }, (err, session) => {
                     if (err) {
                         console.error(err);
@@ -107,6 +108,42 @@ router.post('/',(req,res) =>{
     months += d2.getMonth();
     return months <= 0 ? 0 : months;
 }
+
+
+router.get('/payment-success' , (req,res) => {
+    const session_id = req.query.session_id;
+    if(!session_id){
+        return res.status(400).send('Session ID is missing');
+    }
+
+    stripe.checkout.sessions.retrieve(session_id)
+    .then(session =>{
+        const userEmail = req.session.email;
+        const transactionDetails = new Transactions({
+            session_id: session.id,
+            payment_intent: session.payment_intent,
+            amount_total: session.amount_total,
+            currency: session.currency,
+            payment_status: session.payment_status,
+            user_email: userEmail,
+        });
+        transactionDetails.save()
+        .then( details => {
+            req.session.message = `hello  , your lease has been confirmed  and a reciept of the lease agreement has been sent to your email ${userEmail} `;
+            res.redirect('/dashboard');
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Error confirming transaction');
+        });
+
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).send('Error retrieving the payment information');
+    })
+    
+})
 
 
 module.exports = router;
