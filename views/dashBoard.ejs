@@ -16,14 +16,19 @@
     </style>
 </head>
 <body>
+    <% if(message){ %>
+        <p><%= message %></p>
+    <% } %>
     <div class="col-md-6 m-auto dropdown">
-        <h4><i class="fa-sharp fa-solid fa-circle-chevron-down fa-xl" style="color: #1f4fa3;"></i></h4>
-        <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
-            <li><a class="dropdown-item" href="/dashboard">Home</a></li>
-            <li><a class="dropdown-item" href="/amenities">Amenities</a></li>
-            <li><a class="dropdown-item" href="/bookTour">Book a Tour</a></li>
-            <li><a class="dropdown-item" href="/contactUs">Contact</a></li>
-        </ul>
+        <nav style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li> &nbsp;
+              <li class="breadcrumb-item"><a href="/contactUs">Contact </a></li> &nbsp;
+              <li class="breadcrumb-item">
+                <a href="<%= isNewUser ? '/leaseRenewal' :'/lease'%> ">Lease </a>
+            </li> &nbsp;
+            </ol>
+          </nav>
     </div>
 
     <div class="">
@@ -32,7 +37,7 @@
 
     <script>
         document.getElementById('logout').addEventListener('click',function(){
-            window.location.href = '/'
+            window.location.href = '/users/logout';
         })
     </script>
     

@@ -30,19 +30,14 @@ UserRouter.post('/login', (req, res) => {
                 .then(isMatch => {
                     if (!isMatch) {
                         return res.render('login', { message: 'Invalid email or password' });
-                    }
-
-                    lease.findOne({ user: user._id })
-                        .then(leaseDetails => {
-                            req.session.userId = user._id;
-                            req.session.isNewUser = !leaseDetails;
-                            req.session.message = `Welcome Back ${user.name}!`;
-                            res.redirect('/dashboard');
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            res.status(500).send('Error checking lease details');
-                        });
+                    }else{
+                        req.session.userId = user._id;
+                        console.log(req.session.userId,'at login');
+                        req.session.email = user.email;
+                        req.session.message = `Welcome Back ${user.name}!`;
+                        console.log('here');
+                        res.redirect('/dashboard');
+                    }    
                 })
                 .catch(err => {
                     console.error(err);
@@ -114,8 +109,11 @@ UserRouter.post('/Register',(req,res) =>{
                     if(err) throw err;
 
                     newuser.password = hash;
+
                     newuser.save()
                     .then(user => {
+                        req.session.email = user.email;
+                        req.session.isNewUser = true;
                         req.session.message = `Congrats ${name}, you are registered. Please log in below.`;
                         res.redirect('/users/login');
                     })
@@ -132,6 +130,24 @@ UserRouter.post('/dashboard', (req, res) => {
 });
 
 
+
+
+UserRouter.get('/logout', (req, res) => {
+    // Clear the session
+    console.log(req.session.userId,'at log out');
+    req.session.destroy((err) => {
+        if (err) {
+            // Handle error case
+            console.error("Error clearing the session: ", err);
+            res.status(500).send("Error during logout");
+        } else {
+            // Redirect to home page or login page after logout
+            res.redirect('/');
+        }
+    });
+});
+
+module.exports = UserRouter;
 
 
 

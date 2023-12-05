@@ -1,1 +1,117 @@
-in bookTour ejs
+<h1 class="text-center mb-3">
+    <i class="fa-solid fa-address-book"></i>Book A Tour
+</h1> 
+<form action="/bookTour" method="POST">
+    <div class="alert-success" style="position: relative; padding-right: 35px;">
+        <% if (typeof message !== 'undefined' && message) { %>
+            <p><%= message %></p>
+            <span style="position: absolute; top: 0; right: 10px; cursor: pointer;" onclick="this.parentElement.style.display='none';" aria-label="Close">&times;</span>
+        <% } %>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" name="BedRoomType" type="checkbox" onchange="checkChecked()"  value="oneBedRoom" id="oneBedRoom">
+        <label class="form-check-label" for="flexCheckDefault">
+         one BedRoom
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" name="BedRoomType" onchange="checkChecked()" type="checkbox" value="TwoBedRoom" id="TwoBedRoom" >
+        <label class="form-check-label" for="flexCheckChecked">
+          Two BedRoom
+        </label>
+      </div>
+    <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input type="text" name="ApplicantName" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="text" name="ApplicantEmail" class="form-control" placeholder="Recipient's email" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <span class="input-group-text" id="basic-addon2">@example.com</span>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" name="ApplicantNumber" class="form-control" placeholder="Recipient's PhoneNumber" aria-label="Recipient's PhoneNumber" aria-describedby="basic-addon2">
+            <span class="input-group-text" id="basic-addon2">@example.com</span>
+          </div>
+          
+          <div class="input-group mb-3">
+            <input type="date" name="TourDate" class="form-control"  aria-describedby="basic-addon2">
+          </div>
+
+          <div class="form-check">
+            <p class="d-inline-flex gap-1">
+                <a class="btn btn-primary" name="TourType" href="#collapseExample" data-bs-toggle="collapse" value="VideoTour" role="button" aria-expanded="false" aria-controls="collapseExample" id="VideoTour">
+                 VideoTour
+                </a>
+              </p>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body" >
+                  <div id="videoContainer">
+             
+                  </div>
+                </div>
+              </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input class="form-check-input" name="TourType" type="checkbox" value="LiveTour" id="TourType">
+            <label class="form-check-label" for="flexCheckChecked">
+             Live Tour by our leasing Agent
+            </label>
+          </div>
+          
+          
+          
+          &nbsp;
+          &nbsp;
+    <div class="text-center mb-3"><input class="btn btn-primary" type="submit" value="Submit"></div> &nbsp;&nbsp;
+    <div class="text-center mb-3"><input class="btn btn-primary" type="button" id="back"  value="Back"></div>
+</form>
+<script>
+ 
+function checkChecked(){
+  
+    if(document.getElementById('oneBedRoom').checked === true){
+    document.getElementById('TwoBedRoom').disabled = true;
+ }else if(document.getElementById('TwoBedRoom').checked === true){
+   
+    document.getElementById('oneBedRoom').disabled = true;
+ }
+ else{
+  
+    document.getElementById('oneBedRoom').disabled = false;
+    document.getElementById('TwoBedRoom').disabled = false;
+ }
+}
+
+document.getElementById('VideoTour').addEventListener('click',function(){
+    
+    var oneBed= document.getElementById('oneBedRoom');
+    var twoBed = document.getElementById('TwoBedRoom');
+    var BedType = '';
+    if(oneBed.checked){
+        BedType = 'oneBedRoom';
+    }else{
+        BedType ='TwoBedRoom';
+    }
+    FetchVideo(BedType);
+})
+
+function FetchVideo(bedRoomType){
+    
+    console.log(bedRoomType)
+    fetch('/bookTour/BedRoomVideo?BedRoomType=' +bedRoomType)
+        .then(response => response.json())
+        .then(data =>{
+            document.getElementById('videoContainer').innerHTML = 
+                `<iframe width="560" height="315" src="${data.videoUrl}" frameborder="0" allowfullscreen></iframe>`;
+        })
+}
+ 
+
+document.getElementById('back').addEventListener('click',function(){
+    window.location.href = '/';
+})
+
+
+</script>
+=

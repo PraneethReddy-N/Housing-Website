@@ -1,15 +1,70 @@
-<div class="">
-    <button type="button" id="community"><i class="fa-solid fa-house"> Community amenities</i></button>
-    &nbsp;&nbsp;
-    <button type="button" id="housing" ><i class="fa-solid fa-house"> Housing amenities</i></button>
-   <div id="amenities-container">
-   </div>
+<style>
 
-   <button type="button" id="back" name="back" href="/dashboard">Back</button>
-   
+.carousel-item img {
+    width: 50%;
+    height: 600px; /* or any other fixed height, or 'auto' if you want to maintain the aspect ratio */
+    object-fit: cover;
+}
+
+ .carousel-control-next {
+    z-index: 2;
+    width: 50px; /* increases the hit area */
+}
+
+.carousel-control-prev {
+    z-index: 2; /* Make sure it's above the images */
+    opacity: 5; /* Make it fully visible */
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: #000; /* makes the arrow more visible */
+    background-size: contain;
+}
+
+
+
+/* Ensure the carousel controls are visible against all backgrounds */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    filter: invert(100%);
+}
+.carousel-caption {
+    position: absolute;
+    bottom: 0; /* Position it at the bottom of the `.carousel-item` */
+    left: 0;
+    right: 0;
+    padding: 1rem; /* Add padding to ensure space around the text */
+    background: rgba(0, 0, 0, 1); /* Increase the opacity for better contrast */
+    color: white; /* Adjust text color for readability */
+    text-align: center; /* Center the text */
+}
+
+.carousel-item {
+    position: relative; /* Ensure positioning context for the caption */
+}
+
+
+
+</style>
+
+<div class="amenities">
+    <button type="button" id="community"><i class="fa-solid fa-house"> Community amenities</i></button>
+    &nbsp;&nbsp; &nbsp;
+    <button type="button" id="housing" ><i class="fa-solid fa-house"> Housing amenities</i></button>
+<br />
+<br />
+    <div id="amenities-container">
+   </div>
+    &nbsp;&nbsp;&nbsp;
+    <br />
+    <div class="text-center mb-3">
+        <button  type="button"  class="btn btn-primary " id="back" name="back" href="/dashboard" >Back</button>
+    </div>
 </div>
 
 <script>
+    window.onload = function(){
+        fetchAmenities('/amenities/get-amenities');
+    }
     document.getElementById('community').addEventListener('click',function(){
         fetchAmenities('/amenities/get-amenities')
     });
@@ -24,22 +79,47 @@
         .then(response => response.json())
         .then(data =>{
             console.log(data)
-            var amenitiescontainer = document.getElementById('amenities-container');
-            amenitiescontainer.innerHTML = '';
-
-            data.forEach(element => {
+                var amenitiescontainer = document.getElementById('amenities-container');
+                amenitiescontainer.innerHTML = '';
+                var carouselContainer = document.createElement('div');
+                // var uniqueCarouseId = ``;
+                carouselContainer.innerHTML = `<div id="carouseExampleDark" class = "carousel slide" data-ride="carousel">
+                    <div class = "carousel-inner">
+                    </div>
+                    </div>`
+                var carouselInner = carouselContainer.querySelector('.carousel-inner');
+                var t = 0;
+        data.forEach((element,index)  => {
                 console.log("in element")
-                var amenityDiv = document.createElement('div');
-                    amenityDiv.textContent = `${element.name} - ${element.description}`;
-                    amenitiescontainer.appendChild(amenityDiv);
+                var carouselItem = document.createElement('div');
+                carouselItem.className = `carousel-item active   data-bs-interval=${t+=10000}`;
+                carouselItem.innerHTML = `
+                <img src="${element.image}" class="d-block w-100" alt="${element.name}">
+                <div class="carousel-caption d-none d-md-block">
+                <h5>${element.name}</h5>
+                <p>${element.description}</p>
+                </div>`
+                carouselInner.appendChild(carouselItem);
             });
+            carouselContainer.innerHTML += `
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouseExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouseExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+       
+    </button>`
+
+// Append the entire carousel to the container
+        amenitiescontainer.appendChild(carouselContainer);
         })
         .catch(error=>console.error('Error :', error));
     }
 
     document.getElementById('back').addEventListener('click',function(){
         console.log("in here");
-         window.location.href = '/dashboard';
+         window.location.href = '/';
     });
 
 </script>
